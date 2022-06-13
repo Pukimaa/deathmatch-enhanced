@@ -60,6 +60,15 @@ settings {
     }
 }
 
+# Globar variables
+
+globalvar AntiCrashState 0
+globalvar MenuState 1
+globalvar MenuSelection 2
+globalvar MenuItems 3
+globalvar CamState 4
+globalvar MenuEffect 5
+
 #Player variables
 
 playervar LastHero 0
@@ -67,10 +76,15 @@ playervar PlayerHUD 1
 playervar LoopVar 2
 playervar LastHUDHero 3
 playervar ZaryaBubbles 4
+playervar EyePos 5
+playervar LookingPos 6
+playervar StatsState 7
 
 
 rule "HUD":
     hudText(getAllPlayers(), null, "Interact ({0})".format(buttonString(Button.INTERACT)), "Hold it for 1 sec to switch heroes", HudPosition.LEFT, 0, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(hostPlayer, null, "Crouch ({0}) + Interact ({1})".format(buttonString(Button.CROUCH), buttonString(Button.INTERACT)), "Press it to toggle Host-only Menu", HudPosition.LEFT, 1, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(getAllPlayers(), null, "Crouch ({0}) + Melee ({1})".format(buttonString(Button.CROUCH), buttonString(Button.MELEE)), "Press it to toggle Stats", HudPosition.LEFT, 2, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
 rule "Player joined":
@@ -115,22 +129,14 @@ rule "Hero Select = 0s":
 rule "Interact to switch Heroes":
     @Event eachPlayer
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-    @Condition true == (eventPlayer.getHealth() / eventPlayer.getMaxHealth() > 0.25)
+    @Condition true == (eventPlayer.getHealth() / eventPlayer.getMaxHealth() > 0.25) or eventPlayer.isDead() == true
     
     wait(1, Wait.ABORT_WHEN_FALSE)
     eventPlayer.setAllowedHeroes(eventPlayer.getAllowedHeroes().exclude(eventPlayer.getCurrentHero()))
     wait(0.25)
     eventPlayer.resetHeroAvailability()
-
-rule "Interact to switch Heroe0s (Dead)":
-    @Event eachPlayer
-    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
-    @Condition eventPlayer.isDead() == true
-        
-    wait(1, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.setAllowedHeroes(eventPlayer.getAllowedHeroes().exclude(eventPlayer.getCurrentHero()))
-    wait(0.25)
-    eventPlayer.resetHeroAvailability()
+    MenuState = false
+    CamState = false
 
 
 rule "Too low text":
@@ -175,8 +181,23 @@ rule "Destroy Dummy":
     wait(1, Wait.ABORT_WHEN_FALSE)
     destroyAllDummies()
 
+rule "Anti Crash":
+    @Condition AntiCrashState != true
+    @Condition getServerLoad() > 230
 
-# Include Heroes
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    smallMessage(getAllPlayers(), "Activated anti-crash system! (This will be disabled once the serverload lowers)")
+    setSlowMotion(10)
+    AntiCrashState = true
+
+rule "Disable Anti Crash":
+    @Condition AntiCrashState == true
+    @Condition getServerLoad() < 200
+
+    setSlowMotion(100)
+    AntiCrashState = false
+
+# Include Heroes (DG4CW doesn't use this)
 #!include "heroes/"
 # Include Others
-#!include "menu.opy"
+#!include "host.opy"

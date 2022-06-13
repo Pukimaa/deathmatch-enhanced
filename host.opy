@@ -1,19 +1,25 @@
 #!mainFile "main.opy"
 
-globalvar MenuState 0
-globalvar MenuSelection 1
-globalvar MenuItems 2
-globalvar CamState 3
-globalvar MenuEffect 4
+rule "Stats HUD":
+    @Event eachPlayer
 
-#Player variables
-playervar EyePos 5
-playervar LookingPos 6
+    hudSubtext(eventPlayer if eventPlayer.StatsState == true else [], "Server Load: {0}".format(getServerLoad()), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+
+rule "Toggle Stats":
+    @Event eachPlayer
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
+
+    if eventPlayer.StatsState != true:
+        eventPlayer.StatsState = true
+    else:
+        eventPlayer.StatsState = false
 
 
 rule "Toggle Menu":
     @Event eachPlayer
     @Condition eventPlayer == hostPlayer
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition CamState != true
     
@@ -28,12 +34,11 @@ rule "Menu HUD":
     @Condition eventPlayer == hostPlayer
     
     MenuItems = 1
-    hudHeader(eventPlayer, "Press {0} to toggle menu".format(buttonString(Button.INTERACT)), HudPosition.TOP, 1, Color.AQUA, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(eventPlayer if MenuState and MenuSelection != 0 and CamState != true else [], "Restart Game", HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(eventPlayer if MenuState and MenuSelection == 0 and CamState != true else [], "-> Restart Game", HudPosition.TOP, 2, Color.AQUA, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(eventPlayer if MenuState and MenuSelection != 1 and CamState != true else [], "Debug Cam", HudPosition.TOP, 3, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(eventPlayer if MenuState and MenuSelection == 1 and CamState != true else [], "-> Debug Cam", HudPosition.TOP, 3, Color.AQUA, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(eventPlayer if CamState == true else [], "-> Stop Debug Cam (Press {0} to select)".format(buttonString(Button.INTERACT)), HudPosition.TOP, 3, Color.AQUA, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer if MenuState and MenuSelection != 0 and CamState != true else [], "Restart Game", HudPosition.TOP, 1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer if MenuState and MenuSelection == 0 and CamState != true else [], "-> Restart Game", HudPosition.TOP, 1, Color.AQUA, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer if MenuState and MenuSelection != 1 and CamState != true else [], "Debug Cam", HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer if MenuState and MenuSelection == 1 and CamState != true else [], "-> Debug Cam", HudPosition.TOP, 2, Color.AQUA, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer if CamState == true else [], "-> Stop Debug Cam (Press {0} to select)".format(buttonString(Button.INTERACT)), HudPosition.TOP, 2, Color.AQUA, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
 rule "Joined Menu":
@@ -135,8 +140,6 @@ rule "Debug Mode On":
 rule "Debug Mode Off":
     @Event eachPlayer
     @Condition eventPlayer == hostPlayer
-    @Condition MenuState == true
-    @Condition MenuSelection == 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
     @Condition CamState == true
     

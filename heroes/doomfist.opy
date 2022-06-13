@@ -23,9 +23,9 @@ rule "Doomfist HUD":
     @Condition eventPlayer.LastHUDHero != Hero.DOOMFIST
     
     eventPlayer.PlayerHUD = []
-    hudText(eventPlayer, null, "Primary Fire ({0})".format(buttonString(Button.PRIMARY_FIRE)), "Deals 50% more damage", HudPosition.LEFT, 1, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(eventPlayer, null, "Hand Cannon ({0})".format(buttonString(Button.PRIMARY_FIRE)), "Deals 50% more damage", HudPosition.LEFT, 3, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.PlayerHUD.append(getLastCreatedText())
-    hudText(eventPlayer, null, "Melee ({0})".format(buttonString(Button.MELEE)), "A final blow with your melee gives you 10% extra Ult Charge", HudPosition.LEFT, 2, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(eventPlayer, null, "Melee ({0})".format(buttonString(Button.MELEE)), "A final blow with your melee gives you 10% extra Ult Charge", HudPosition.LEFT, 4, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.PlayerHUD.append(getLastCreatedText())
     eventPlayer.LastHUDHero = Hero.DOOMFIST
 
