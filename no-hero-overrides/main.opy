@@ -1,7 +1,7 @@
 #!mainFile "main.opy"
 settings {
     "main": {
-        "description": "v1 | Some Heroes have special abillities | Code: X9ENS",
+        "description": "v1 | No Hero Changes | Code: DG4CW",
         "modeName": "Deathmatch Enhanced"
     },
     "lobby": {
@@ -48,20 +48,6 @@ settings {
             "gamemodeStartTrigger": "immediately",
         }
     },
-    "heroes": {
-        "allTeams": {
-            "bastion": {
-                "damageDealt%": 75
-            },
-            "doomfist": {
-                "ammoRegenerationTime%": 75,
-                "projectileSpeed%": 150
-            },
-            "hanzo": {
-                "ability3Cooldown%": 50
-            }
-        }
-    }
 }
 
 # Globar variables
@@ -198,6 +184,5 @@ rule "Disable Anti Crash":
     AntiCrashState = false
 
 # Include Heroes (DG4CW doesn't use this)
-#!include "heroes/"
 # Include Others
 #!include "host.opy"

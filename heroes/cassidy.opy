@@ -15,7 +15,7 @@ rule "Cassidy HUD":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.LastHUDHero != Hero.MCCREE
     
-    hudText(eventPlayer, null, "Ultimate ({0})".format(buttonString(Button.ULTIMATE)), "Kills the nearest player", HudPosition.LEFT, 3, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(eventPlayer, null, "Ultimate ({0})".format(buttonString(Button.ULTIMATE)), "Kills the nearest player", HudPosition.RIGHT, 3, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.PlayerHUD = getLastCreatedText()
     eventPlayer.LastHUDHero = Hero.MCCREE
 

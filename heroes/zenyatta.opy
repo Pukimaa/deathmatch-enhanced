@@ -1,15 +1,5 @@
 #!mainFile "../main.opy"
 
-rule "Zen Kick":
-    @Event playerDealtDamage
-    @Hero zenyatta
-    @Condition eventPlayer.isMeleeing() == true
-    
-    getClosestPlayer(eventPlayer, Team.ALL).applyImpulse(vectorTowards(eventPlayer, eventPlayer.getPlayerClosestToReticle(Team.ALL)), 15, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
-    damage(getClosestPlayer(eventPlayer, Team.ALL), null, eventDamage * 0.5)
-    eventPlayer.setUltCharge(eventPlayer.getUltCharge() + 1)
-
-
 rule "Zen Ult":
     @Event eachPlayer
     @Hero zenyatta
@@ -24,7 +14,7 @@ rule "Zen HUD":
     @Condition eventPlayer.hasSpawned() == true
     @Condition eventPlayer.LastHUDHero != Hero.ZENYATTA
     
-    hudText(eventPlayer, null, "Melee ({0})".format(buttonString(Button.MELEE)), "Knocks back enemies and deals more damage", HudPosition.LEFT, 1, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(eventPlayer, null, "Ultimate ({0})".format(buttonString(Button.ULTIMATE)), "Makes you phased out, similiar to Reaper's Wraith Form", HudPosition.RIGHT, 1, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     eventPlayer.PlayerHUD = getLastCreatedText()
     eventPlayer.LastHUDHero = Hero.ZENYATTA
 
